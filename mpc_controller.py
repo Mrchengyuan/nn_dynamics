@@ -6,9 +6,20 @@ import math # 导入math模块，用于数学运算 (Import math module for math
 import matplotlib.pyplot as plt # 导入matplotlib的pyplot模块，用于绘图 (Import matplotlib's pyplot module for plotting)
 import copy # 导入copy模块，用于创建对象的副本 (Import copy module for creating copies of objects)
 from six.moves import cPickle # 从six.moves导入cPickle，用于Python 2/3兼容的pickle (Import cPickle from six.moves for Python 2/3 compatible pickle)
-from rllab.misc import tensor_utils # 从rllab.misc导入tensor_utils (Import tensor_utils from rllab.misc) - 注意：此模块可能与PyTorch不直接兼容，后续可能需要检查 (Note: This module might not be directly compatible with PyTorch and may need checking later)
 from data_manipulation import from_observation_to_usablestate # 从data_manipulation模块导入from_observation_to_usablestate函数 (Import from_observation_to_usablestate function from data_manipulation module)
 from reward_functions import RewardFunctions # 从reward_functions模块导入RewardFunctions类 (Import RewardFunctions class from reward_functions module)
+
+# rllab的tensor_utils已移除，因此在此实现等价功能 (rllab's tensor_utils was removed, so implement equivalent functions here)
+def stack_tensor_list(tensor_list):
+    """将张量列表堆叠成一个numpy数组 (Stack a list of tensors into a numpy array)."""
+    return np.array(tensor_list)
+
+def stack_tensor_dict_list(tensor_dict_list):
+    """将字典列表按键堆叠成字典, 每个键对应一个numpy数组 (Stack a list of dicts into a dict of numpy arrays)."""
+    if not tensor_dict_list:
+        return {}
+    keys = tensor_dict_list[0].keys()
+    return {k: np.array([d[k] for d in tensor_dict_list]) for k in keys}
 
 class MPCController: # 定义MPCController类 (Define MPCController class)
 
@@ -181,14 +192,13 @@ class MPCController: # 定义MPCController类 (Define MPCController class)
             print("DONE TAKING ", step, " STEPS.") # 打印完成步数信息 (Print message about completed steps)
             print("Reward: ", total_reward_for_episode) # 打印总奖励 (Print total reward)
 
-        # tensor_utils.stack_tensor_list 和 stack_tensor_dict_list 来自rllab，它们处理numpy数组列表 (tensor_utils.stack_tensor_list and stack_tensor_dict_list are from rllab, they handle lists of numpy arrays)
-        # 如果这些函数不直接处理PyTorch张量，确保输入是NumPy数组 (If these functions don't handle PyTorch tensors directly, ensure inputs are NumPy arrays)
+        # 将列表或字典列表堆叠成数组，替代rllab的tensor_utils (Stack lists or dict lists into arrays, replacing rllab.tensor_utils)
         mydict = dict( # 创建字典 (Create dictionary)
-        observations=tensor_utils.stack_tensor_list(observations), # 观测 (Observations)
-        actions=tensor_utils.stack_tensor_list(actions_taken), # 动作 (Actions)
-        rewards=tensor_utils.stack_tensor_list(rewards), # 奖励 (Rewards)
+        observations=stack_tensor_list(observations), # 观测 (Observations)
+        actions=stack_tensor_list(actions_taken), # 动作 (Actions)
+        rewards=stack_tensor_list(rewards), # 奖励 (Rewards)
         agent_infos=agent_infos, # 智能体信息 (Agent infos)
-        env_infos=tensor_utils.stack_tensor_dict_list(env_infos)) # 环境信息 (Environment infos)
+        env_infos=stack_tensor_dict_list(env_infos)) # 环境信息 (Environment infos)
 
         return traj_taken, actions_taken, total_reward_for_episode, mydict # 返回轨迹、动作、总奖励和字典 (Return trajectory, actions, total reward, and dictionary)
 
