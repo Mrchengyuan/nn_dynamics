@@ -2,6 +2,7 @@ import copy # 导入copy模块，用于创建对象的副本 (Import copy module
 import time # 导入time模块，用于时间相关操作 (Import time module for time-related operations)
 import torch # 导入torch库 (Import torch library)
 import numpy as np # 导入numpy库，用于数值计算 (Import numpy for numerical computation)
+import os  # 导入os模块，用于检查环境变量 (Import os module for checking env vars)
 
 # # 导入rllab环境 (import rllab envs) - rllab的normalize已被移除 (rllab's normalize has been removed)
 # from rllab.envs.normalized_env import normalize
@@ -34,6 +35,11 @@ def perform_rollouts(policy, num_rollouts, steps_per_rollout, visualize_rollouts
 
 
 def create_env(which_agent, seed=2, render_mode=None): # 定义创建环境的函数，添加seed和render_mode参数 (Define function to create environment, add seed and render_mode parameters)
+    # 如果请求human渲染但系统没有DISPLAY，退回不渲染模式 (Fallback if DISPLAY missing)
+    if render_mode == 'human' and os.environ.get('DISPLAY') is None:
+        print("Warning: DISPLAY not found, falling back to headless mode")
+        render_mode = None
+
     env = None # 初始化env为None (Initialize env to None)
     # 设置环境 (setup environment)
     if(which_agent==0): # 如果智能体类型为0 (If agent type is 0)
