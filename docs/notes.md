@@ -1,3 +1,15 @@
+<!--
+This file provides general notes about the project structure and key files for customization.
+The codebase has been migrated from its original TensorFlow/rllab implementation to PyTorch/Garage/Gymnasium.
+While the file names and general concepts mentioned here largely remain, the specific implementations within those files now use the new libraries.
+Please refer to PyTorch, Garage, and Gymnasium documentation for specific API details when customizing.
+
+此文件提供了关于项目结构和用于自定义的关键文件的一般说明。
+代码库已从其原始的TensorFlow/rllab实现迁移到PyTorch/Garage/Gymnasium。
+虽然此处提及的文件名和一般概念在很大程度上保持不变，但这些文件中的具体实现现在使用新的库。
+在进行自定义时，请参考PyTorch、Garage和Gymnasium的文档以获取具体的API详细信息。
+-->
+
 # NOTES 
 
 If you want to <br />
@@ -52,4 +64,3 @@ c) reward_functions.py <br />
 
 **depth_fc_layers** <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension of each hidden layer in dynamics model<br />
-

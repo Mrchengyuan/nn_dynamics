@@ -5,7 +5,7 @@
 #####################################
 
 #location of all saved trpo runs
-trpo_dir='/home/anagabandi/rllab/data/local/experiment/'
+trpo_dir='../data/local/experiment/' # Updated to relative path for Garage output
 
 #specific to the run
 how_many_seeds=3
@@ -31,9 +31,9 @@ do
 	echo $run_num
 	save_trpo_run_num=$(( 1 + $iter_num ))
 
-	python main.py --seed=$seed --run_num=$run_num --yaml_file='swimmer_forward'
-	python mbmf.py --run_num=$run_num --which_agent=$which_agent --std_on_mlp_policy=$std_on_mlp_policy
-	python trpo_run_mf.py --seed=$seed --save_trpo_run_num=$save_trpo_run_num --which_agent=$which_agent --num_workers_trpo=$num_workers_trpo
+	python3 main.py --seed=$seed --run_num=$run_num --yaml_file='swimmer_forward'
+	python3 mbmf.py --run_num=$run_num --which_agent=$which_agent --std_on_mlp_policy=$std_on_mlp_policy
+	python3 trpo_run_mf.py --seed=$seed --save_trpo_run_num=$save_trpo_run_num --which_agent=$which_agent # --num_workers_trpo argument removed as Garage handles parallelism differently
 
 	iter_num=$(( $iter_num + 1))
 done
@@ -46,15 +46,15 @@ cd plotting
 
 if [ $how_many_seeds -eq 3 ]
 then
-python plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 2 3 --seeds ${seeds[0]} ${seeds[1]} ${seeds[2]}
+python3 plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 2 3 --seeds ${seeds[0]} ${seeds[1]} ${seeds[2]}
 fi
 
 if [ $how_many_seeds -eq 2 ]
 then
-python plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 2 --seeds ${seeds[0]} ${seeds[1]}
+python3 plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 2 --seeds ${seeds[0]} ${seeds[1]}
 fi
 
 if [ $how_many_seeds -eq 1 ]
 then
-python plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 --seeds ${seeds[0]}
+python3 plot_mbmf.py --trpo_dir=$trpo_dir --std_on_mlp_policy=$std_on_mlp_policy --which_agent=$which_agent --run_nums 1 --seeds ${seeds[0]}
 fi

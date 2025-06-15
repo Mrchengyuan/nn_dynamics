@@ -1,5 +1,12 @@
+# **IMPORTANT NOTE: These installation instructions are outdated.**
 
-# INSTALLING EVERYTHING
+**Please refer to the main `README.md` file in the root directory for the current and recommended setup instructions.**
+
+The information below is preserved for historical context but should not be used for new installations.
+
+---
+
+# INSTALLING EVERYTHING (Old Instructions)
 
 ### ANACONDA (if you don't have)<br />
 

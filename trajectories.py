@@ -1,156 +1,156 @@
-import numpy as np
+import numpy as np # 导入numpy库，用于数值计算 (Import numpy for numerical computation)
 
-def make_trajectory(shape, starting_state_NN, x_index, y_index, which_agent):
+def make_trajectory(shape, starting_state_NN, x_index, y_index, which_agent): # 定义创建轨迹的函数 (Define function to make trajectory)
 
-    curr_x = np.copy(starting_state_NN[x_index])
-    curr_y = np.copy(starting_state_NN[y_index])
+    curr_x = np.copy(starting_state_NN[x_index]) # 复制起始状态的x坐标 (Copy x-coordinate of starting state)
+    curr_y = np.copy(starting_state_NN[y_index]) # 复制起始状态的y坐标 (Copy y-coordinate of starting state)
 
-    my_list = []
+    my_list = [] # 初始化轨迹点列表 (Initialize list for trajectory points)
 
-    if(shape=="left_turn"):
-        if(which_agent==1):
-            my_list.append(np.array([curr_x, curr_y]))
-            my_list.append(np.array([curr_x+2, curr_y]))
-            my_list.append(np.array([curr_x+4, curr_y]))
-            my_list.append(np.array([curr_x+6, curr_y]))
-            my_list.append(np.array([curr_x+6, curr_y+2]))
-            my_list.append(np.array([curr_x+6, curr_y+3]))
-            my_list.append(np.array([curr_x+6, curr_y+4]))
-            my_list.append(np.array([curr_x+6, curr_y+5]))
-            my_list.append(np.array([curr_x+6, curr_y+6]))
-            my_list.append(np.array([curr_x+6, curr_y+7]))
-        else:
-            my_list.append(np.array([curr_x, curr_y]))
-            my_list.append(np.array([curr_x+1, curr_y]))
-            my_list.append(np.array([curr_x+2, curr_y]))
-            my_list.append(np.array([curr_x+3, curr_y]))
-            my_list.append(np.array([curr_x+4, curr_y+1]))
-            my_list.append(np.array([curr_x+4, curr_y+2]))
-            my_list.append(np.array([curr_x+4, curr_y+3]))
-            my_list.append(np.array([curr_x+4, curr_y+4]))
+    if(shape=="left_turn"): # 如果形状是左转 (If shape is left_turn)
+        if(which_agent==1): # 如果是Ant智能体 (If agent is Ant)
+            my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+            my_list.append(np.array([curr_x+2, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+2])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+5])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+6])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+7])) # 添加点 (Add point)
+        else: # 其他智能体 (For other agents)
+            my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+            my_list.append(np.array([curr_x+1, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+2, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+3, curr_y])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+1])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+2])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+4])) # 添加点 (Add point)
 
-    if(shape=="right_turn"):
-        if(which_agent==1):
-            my_list.append(np.array([curr_x, curr_y]))
-            my_list.append(np.array([curr_x, curr_y+1]))
-            my_list.append(np.array([curr_x, curr_y+2]))
-            my_list.append(np.array([curr_x, curr_y+3]))
-            my_list.append(np.array([curr_x, curr_y+4]))
-            my_list.append(np.array([curr_x+2, curr_y+4]))
-            my_list.append(np.array([curr_x+3, curr_y+4]))
-            my_list.append(np.array([curr_x+4, curr_y+4]))
-            my_list.append(np.array([curr_x+6, curr_y+4]))
-            my_list.append(np.array([curr_x+7, curr_y+4]))
-        else:
-            my_list.append(np.array([curr_x, curr_y]))
-            my_list.append(np.array([curr_x, curr_y+1]))
-            my_list.append(np.array([curr_x, curr_y+2]))
-            my_list.append(np.array([curr_x+2, curr_y+3]))
-            my_list.append(np.array([curr_x+3, curr_y+3]))
-            my_list.append(np.array([curr_x+4, curr_y+3]))
-            my_list.append(np.array([curr_x+5, curr_y+3]))
-            my_list.append(np.array([curr_x+6, curr_y+3]))
-            my_list.append(np.array([curr_x+7, curr_y+3]))
-            my_list.append(np.array([curr_x+8, curr_y+3]))
+    if(shape=="right_turn"): # 如果形状是右转 (If shape is right_turn)
+        if(which_agent==1): # 如果是Ant智能体 (If agent is Ant)
+            my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+            my_list.append(np.array([curr_x, curr_y+1])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x, curr_y+2])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+2, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+3, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+4])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+7, curr_y+4])) # 添加点 (Add point)
+        else: # 其他智能体 (For other agents)
+            my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+            my_list.append(np.array([curr_x, curr_y+1])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x, curr_y+2])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+2, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+3, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+4, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+5, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+6, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+7, curr_y+3])) # 添加点 (Add point)
+            my_list.append(np.array([curr_x+8, curr_y+3])) # 添加点 (Add point)
 
-    if(shape=="u_turn"):
-        my_list.append(np.array([curr_x, curr_y]))
-        my_list.append(np.array([curr_x+2, curr_y]))
-        my_list.append(np.array([curr_x+4, curr_y]))
-        my_list.append(np.array([curr_x+4, curr_y+1]))
-        my_list.append(np.array([curr_x+4, curr_y+2]))
-        my_list.append(np.array([curr_x+2, curr_y+2]))
-        my_list.append(np.array([curr_x+1, curr_y+2]))
-        my_list.append(np.array([curr_x, curr_y+2]))
+    if(shape=="u_turn"): # 如果形状是U型转弯 (If shape is u_turn)
+        my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+        my_list.append(np.array([curr_x+2, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+4, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+4, curr_y+1])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+4, curr_y+2])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+2, curr_y+2])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+1, curr_y+2])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x, curr_y+2])) # 添加点 (Add point)
 
-    if(shape=="straight"):
-        i=0
-        num_pts = 40
-        while(i < num_pts):
-            my_list.append(np.array([curr_x+i, curr_y]))
-            i+=0.7
+    if(shape=="straight"): # 如果形状是直线 (If shape is straight)
+        i=0 # 初始化计数器 (Initialize counter)
+        num_pts = 40 # 点的数量 (Number of points)
+        while(i < num_pts): # 当计数器小于点数量时 (While counter is less than number of points)
+            my_list.append(np.array([curr_x+i, curr_y])) # 添加直线上的点 (Add point on the straight line)
+            i+=0.7 # 增加计数器 (Increment counter)
 
-    if(shape=="backward"):
-        i=0
-        num_pts = 40
-        while(i < num_pts):
-            my_list.append(np.array([curr_x-i, curr_y]))
-            i+=0.5
+    if(shape=="backward"): # 如果形状是后退 (If shape is backward)
+        i=0 # 初始化计数器 (Initialize counter)
+        num_pts = 40 # 点的数量 (Number of points)
+        while(i < num_pts): # 当计数器小于点数量时 (While counter is less than number of points)
+            my_list.append(np.array([curr_x-i, curr_y])) # 添加后退路径上的点 (Add point on the backward path)
+            i+=0.5 # 增加计数器 (Increment counter)
 
-    if(shape=="forward_backward"):
-        my_list.append(np.array([curr_x, curr_y]))
-        my_list.append(np.array([curr_x+1, curr_y]))
-        my_list.append(np.array([curr_x+2, curr_y]))
-        my_list.append(np.array([curr_x+3, curr_y]))
-        my_list.append(np.array([curr_x+2, curr_y]))
-        my_list.append(np.array([curr_x+1, curr_y]))
-        my_list.append(np.array([curr_x+0, curr_y]))
-        my_list.append(np.array([curr_x-1, curr_y]))
-        my_list.append(np.array([curr_x-2, curr_y]))
+    if(shape=="forward_backward"): # 如果形状是前进后退 (If shape is forward_backward)
+        my_list.append(np.array([curr_x, curr_y])) # 添加当前点 (Add current point)
+        my_list.append(np.array([curr_x+1, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+2, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+3, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+2, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+1, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x+0, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x-1, curr_y])) # 添加点 (Add point)
+        my_list.append(np.array([curr_x-2, curr_y])) # 添加点 (Add point)
 
-    if(shape=="circle"):
-        num_pts = 10
-        radius=2.0
-        speed=-np.pi/8.0
-        for i in range(num_pts):
-            curr_x= radius*np.cos(speed*i)-radius
-            curr_y= radius*np.sin(speed*i)
-            my_list.append(np.array([curr_x, curr_y]))
+    if(shape=="circle"): # 如果形状是圆形 (If shape is circle)
+        num_pts = 10 # 点的数量 (Number of points)
+        radius=2.0 # 半径 (Radius)
+        speed=-np.pi/8.0 # 速度 (Speed)
+        for i in range(num_pts): # 对于每个点 (For each point)
+            curr_x_circle= radius*np.cos(speed*i)-radius # 计算圆上点的x坐标 (Calculate x-coordinate of point on circle) - 注意变量名不一致 (Note: variable name inconsistency curr_x vs curr_x_circle)
+            curr_y_circle= radius*np.sin(speed*i) # 计算圆上点的y坐标 (Calculate y-coordinate of point on circle)
+            my_list.append(np.array([curr_x_circle, curr_y_circle])) # 添加点到列表 (Add point to list)
 
-    return np.array(my_list)
+    return np.array(my_list) # 返回轨迹点列表的numpy数组 (Return numpy array of trajectory points list)
 
-def get_trajfollow_params(which_agent, desired_traj_type):
+def get_trajfollow_params(which_agent, desired_traj_type): # 定义获取轨迹跟随参数的函数 (Define function to get trajectory following parameters)
 
-    desired_snake_headingInit= 0
-    horiz_penalty_factor= 0
-    forward_encouragement_factor= 0
-    heading_penalty_factor= 0
+    desired_snake_headingInit= 0 # 初始化期望的蛇初始朝向 (Initialize desired snake initial heading)
+    horiz_penalty_factor= 0 # 初始化水平惩罚因子 (Initialize horizontal penalty factor)
+    forward_encouragement_factor= 0 # 初始化前向鼓励因子 (Initialize forward encouragement factor)
+    heading_penalty_factor= 0 # 初始化朝向惩罚因子 (Initialize heading penalty factor)
 
-    if(which_agent==1):
-        if(desired_traj_type=="right_turn"):
-            horiz_penalty_factor= 3
-            forward_encouragement_factor= 50
-            heading_penalty_factor= 100
-        if(desired_traj_type=="left_turn"):
-            horiz_penalty_factor= 4
-            forward_encouragement_factor= 85
-            heading_penalty_factor= 100
-        if(desired_traj_type=="straight"):
-            horiz_penalty_factor= 3.5
-            forward_encouragement_factor= 85
-            heading_penalty_factor= 100
-        if(desired_traj_type=="u_turn"):
-            horiz_penalty_factor= 3
-            forward_encouragement_factor= 50
-            heading_penalty_factor= 100
+    if(which_agent==1): # 如果是Ant智能体 (If agent is Ant)
+        if(desired_traj_type=="right_turn"): # 如果期望轨迹是右转 (If desired trajectory is right_turn)
+            horiz_penalty_factor= 3 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 50 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 100 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="left_turn"): # 如果期望轨迹是左转 (If desired trajectory is left_turn)
+            horiz_penalty_factor= 4 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 85 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 100 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="straight"): # 如果期望轨迹是直线 (If desired trajectory is straight)
+            horiz_penalty_factor= 3.5 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 85 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 100 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="u_turn"): # 如果期望轨迹是U型转弯 (If desired trajectory is u_turn)
+            horiz_penalty_factor= 3 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 50 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 100 # 设置朝向惩罚因子 (Set heading penalty factor)
 
-    if(which_agent==2):
-        if(desired_traj_type=="right_turn"):
-            desired_snake_headingInit= np.pi/2.0
-            horiz_penalty_factor= 0.1 
-            forward_encouragement_factor= 250
-            heading_penalty_factor= 0.9
-        if(desired_traj_type=="left_turn"):
-            horiz_penalty_factor= 0.7
-            forward_encouragement_factor= 200
-            heading_penalty_factor= 0.9
-        if(desired_traj_type=="straight"):
-            horiz_penalty_factor= 4
-            forward_encouragement_factor= 500
-            heading_penalty_factor= 2
+    if(which_agent==2): # 如果是Swimmer智能体 (If agent is Swimmer)
+        if(desired_traj_type=="right_turn"): # 如果期望轨迹是右转 (If desired trajectory is right_turn)
+            desired_snake_headingInit= np.pi/2.0 # 设置期望的蛇初始朝向 (Set desired snake initial heading)
+            horiz_penalty_factor= 0.1  # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 250 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 0.9 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="left_turn"): # 如果期望轨迹是左转 (If desired trajectory is left_turn)
+            horiz_penalty_factor= 0.7 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 200 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 0.9 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="straight"): # 如果期望轨迹是直线 (If desired trajectory is straight)
+            horiz_penalty_factor= 4 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 500 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 2 # 设置朝向惩罚因子 (Set heading penalty factor)
 
-    if(which_agent==4):
-        if(desired_traj_type=="backward"):
-            horiz_penalty_factor= 0
-            forward_encouragement_factor= 20
-            heading_penalty_factor= 10
-        if(desired_traj_type=="forward_backward"):
-            horiz_penalty_factor= 0
-            forward_encouragement_factor= 20
-            heading_penalty_factor= 10
-        if(desired_traj_type=="straight"):
-            horiz_penalty_factor= 0
-            forward_encouragement_factor= 40
-            heading_penalty_factor= 10
+    if(which_agent==4): # 如果是Cheetah智能体 (If agent is Cheetah)
+        if(desired_traj_type=="backward"): # 如果期望轨迹是后退 (If desired trajectory is backward)
+            horiz_penalty_factor= 0 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 20 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 10 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="forward_backward"): # 如果期望轨迹是前进后退 (If desired trajectory is forward_backward)
+            horiz_penalty_factor= 0 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 20 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 10 # 设置朝向惩罚因子 (Set heading penalty factor)
+        if(desired_traj_type=="straight"): # 如果期望轨迹是直线 (If desired trajectory is straight)
+            horiz_penalty_factor= 0 # 设置水平惩罚因子 (Set horizontal penalty factor)
+            forward_encouragement_factor= 40 # 设置前向鼓励因子 (Set forward encouragement factor)
+            heading_penalty_factor= 10 # 设置朝向惩罚因子 (Set heading penalty factor)
 
-    return horiz_penalty_factor, forward_encouragement_factor, heading_penalty_factor, desired_snake_headingInit
+    return horiz_penalty_factor, forward_encouragement_factor, heading_penalty_factor, desired_snake_headingInit # 返回轨迹跟随参数 (Return trajectory following parameters)

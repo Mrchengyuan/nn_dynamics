@@ -1,26 +1,23 @@
 
-import numpy as np
-import tensorflow as tf
+import torch # 导入torch库
+import torch.nn as nn # 导入torch.nn模块，用于构建神经网络
 
-def feedforward_network(inputState, inputSize, outputSize, num_fc_layers, depth_fc_layers, tf_datatype):
+class FeedforwardNetwork(nn.Module): # 定义一个名为FeedforwardNetwork的类，继承自nn.Module
+    def __init__(self, inputSize, outputSize, num_fc_layers, depth_fc_layers): # 定义构造函数
+        super(FeedforwardNetwork, self).__init__() # 调用父类的构造函数
 
-    #vars
-    intermediate_size=depth_fc_layers
-    reuse= False
-    initializer = tf.contrib.layers.xavier_initializer(uniform=False, seed=None, dtype=tf_datatype)
-    fc = tf.contrib.layers.fully_connected
+        self.layers = nn.ModuleList() # 创建一个ModuleList来存储网络层
 
-    # make hidden layers
-    for i in range(num_fc_layers):
-        if(i==0):
-            fc_i = fc(inputState, num_outputs=intermediate_size, activation_fn=None, 
-                    weights_initializer=initializer, biases_initializer=initializer, reuse=reuse, trainable=True)
-        else:
-            fc_i = fc(h_i, num_outputs=intermediate_size, activation_fn=None, 
-                    weights_initializer=initializer, biases_initializer=initializer, reuse=reuse, trainable=True)
-        h_i = tf.nn.relu(fc_i)
+        current_size = inputSize # 设置当前层的大小为输入大小
+        for i in range(num_fc_layers): # 循环创建全连接层
+            self.layers.append(nn.Linear(current_size, depth_fc_layers)) # 添加一个线性层（全连接层）
+            self.layers.append(nn.ReLU()) # 添加一个ReLU激活函数层
+            current_size = depth_fc_layers # 更新当前层的大小为隐藏层深度
 
-    # make output layer
-    z=fc(h_i, num_outputs=outputSize, activation_fn=None, weights_initializer=initializer, 
-        biases_initializer=initializer, reuse=reuse, trainable=True)
-    return z
+        self.layers.append(nn.Linear(current_size, outputSize)) # 添加最后一个线性层（输出层）
+        # PyTorch的nn.Linear默认使用Xavier/Glorot初始化，与tf.contrib.layers.xavier_initializer(uniform=False)类似
+
+    def forward(self, x): # 定义前向传播函数
+        for layer in self.layers: # 遍历所有层
+            x = layer(x) # 将输入x传递给当前层
+        return x # 返回最终的输出
