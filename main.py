@@ -11,7 +11,6 @@ import copy # 导入copy模块，用于创建对象的副本 (Import copy module
 import os # 导入os模块，用于与操作系统交互 (Import os module for interacting with the operating system)
 import sys # 导入sys模块，用于访问与Python解释器相关的变量和函数 (Import sys module for accessing Python interpreter related variables and functions)
 from six.moves import cPickle # 从six.moves导入cPickle，用于Python 2/3兼容的pickle (Import cPickle from six.moves for Python 2/3 compatible pickle)
-from rllab.envs.normalized_env import normalize # 从rllab.envs.normalized_env导入normalize函数 (Import normalize function from rllab.envs.normalized_env)
 import yaml # 导入yaml模块，用于处理YAML文件 (Import yaml module for handling YAML files)
 import argparse # 导入argparse模块，用于解析命令行参数 (Import argparse module for parsing command-line arguments)
 import json # 导入json模块，用于处理JSON数据 (Import json module for handling JSON data)
@@ -48,10 +47,21 @@ def main(): # 定义主函数 (Define main function)
     parser.add_argument('--desired_traj_type', type=str, default='straight') # 添加desired_traj_type参数 (straight, left_turn, right_turn, u_turn, backward, forward_backward) (Add desired_traj_type argument)
     parser.add_argument('--num_rollouts_save_for_mf', type=int, default=60) # 添加num_rollouts_save_for_mf参数 (Add num_rollouts_save_for_mf argument)
 
+    # 额外参数用于测试时覆盖yaml配置 (Extra parameters to override yaml config during tests)
+    parser.add_argument('--num_aggregation_iters', type=int, default=None) # 聚合迭代次数 (Number of aggregation iterations)
+    parser.add_argument('--num_rollouts_train', type=int, default=None) # 训练rollout数量 (Number of rollouts for training)
+    parser.add_argument('--num_rollouts_val', type=int, default=None) # 验证rollout数量 (Number of rollouts for validation)
+    parser.add_argument('--steps_per_rollout_train', type=int, default=None) # 训练每个rollout的步数 (Steps per rollout for training)
+    parser.add_argument('--steps_per_rollout_val', type=int, default=None) # 验证每个rollout的步数 (Steps per rollout for validation)
+    parser.add_argument('--nEpoch', type=int, default=None) # 训练周期数 (Number of epochs)
+    parser.add_argument('--num_trajectories_for_aggregation', type=int, default=None) # 用于聚合的轨迹数量 (Number of trajectories for aggregation)
+    parser.add_argument('--rollouts_forTraining', type=int, default=None) # 聚合训练用的rollout数量 (Number of rollouts used for training in aggregation)
+
     parser.add_argument('--might_render', action="store_true", dest='might_render', default=False) # 添加might_render参数 (Add might_render argument)
     parser.add_argument('--visualize_MPC_rollout', action="store_true", dest='visualize_MPC_rollout', default=False) # 添加visualize_MPC_rollout参数 (Add visualize_MPC_rollout argument)
     parser.add_argument('--perform_forwardsim_for_vis', action="store_true", dest='perform_forwardsim_for_vis', default=False) # 添加perform_forwardsim_for_vis参数 (Add perform_forwardsim_for_vis argument)
-    parser.add_argument('--print_minimal', action="store_true", dest='print_minimal', default=False) # 添加print_minimal参数 (Add print_minimal argument)
+    parser.add_argument('--print_minimal', dest='print_minimal', nargs='?', const=True,
+                        default=False, type=lambda x: str(x).lower() == 'true') # 添加print_minimal参数, 允许显式True/False (Add print_minimal argument, allow explicit True/False)
     args = parser.parse_args() # 解析命令行参数 (Parse command-line arguments)
 
 
@@ -104,7 +114,25 @@ def main(): # 定义主函数 (Define main function)
     visualize_True = params['generic']['visualize_True'] # 可视化选项True (Visualize option True)
     visualize_False = params['generic']['visualize_False'] # 可视化选项False (Visualize option False)
     # 来自命令行参数 (from args)
-    print_minimal= args.print_minimal # 是否最小化打印信息 (Whether to minimize print output)
+    print_minimal = args.print_minimal # 是否最小化打印信息 (Whether to minimize print output)
+
+    # 如提供命令行参数则覆盖YAML中的设置 (override YAML settings if provided via command line)
+    if args.num_aggregation_iters is not None:
+        num_aggregation_iters = args.num_aggregation_iters
+    if args.num_rollouts_train is not None:
+        num_rollouts_train = args.num_rollouts_train
+    if args.num_rollouts_val is not None:
+        num_rollouts_val = args.num_rollouts_val
+    if args.steps_per_rollout_train is not None:
+        steps_per_rollout_train = args.steps_per_rollout_train
+    if args.steps_per_rollout_val is not None:
+        steps_per_rollout_val = args.steps_per_rollout_val
+    if args.nEpoch is not None:
+        nEpoch = args.nEpoch
+    if args.num_trajectories_for_aggregation is not None:
+        num_trajectories_for_aggregation = args.num_trajectories_for_aggregation
+    if args.rollouts_forTraining is not None:
+        rollouts_forTraining = args.rollouts_forTraining
 
 
     ########################################
@@ -149,7 +177,7 @@ def main(): # 定义主函数 (Define main function)
     # 更多变量 (more vars)
     x_index, y_index, z_index, yaw_index, joint1_index, joint2_index, frontleg_index, frontshin_index, frontfoot_index, xvel_index, orientation_index = get_indices(which_agent) # 获取智能体的索引 (Get indices for the agent)
     # tf_datatype = tf.float64 # TensorFlow数据类型 (TensorFlow data type) -> PyTorch使用torch.double (PyTorch uses torch.double)
-    torch_datatype = torch.double # PyTorch数据类型 (PyTorch data type)
+    torch_datatype = torch.float32 # PyTorch数据类型 (PyTorch data type)
     noiseToSignal = 0.01 # 噪声信号比 (Noise to signal ratio)
 
     # n代表噪声，c代表干净... 第一个字母表示执行的动作，第二个字母表示聚合的动作 (n is noisy, c is clean... 1st letter is what action's executed and 2nd letter is what action's aggregated)
@@ -385,7 +413,7 @@ def main(): # 定义主函数 (Define main function)
     # 注意：TensorFlow会话参数已移除 (Note: TensorFlow session parameter is removed)
     dyn_model = Dyn_Model(inputSize, outputSize, lr, batchsize, which_agent, x_index, y_index, num_fc_layers,
                         depth_fc_layers, mean_x, mean_y, mean_z, std_x, std_y, std_z, print_minimal, device=device) # 创建Dyn_Model实例 (Create Dyn_Model instance)
-    dyn_model.to(torch_datatype) # 将模型参数转换为torch.double (Convert model parameters to torch.double)
+    dyn_model = dyn_model.to(dtype=torch_datatype, device=device) # 设置模型的数据类型和设备 (Set model dtype and device)
 
 
     # 创建MPC控制器 (create mpc controller)
@@ -527,6 +555,11 @@ def main(): # 定义主函数 (Define main function)
                 labels_10step_np.append(states_val[i][0+10:length_curr_rollout-100+10]) # 添加10步标签 (Add 10-step labels)
                 labels_50step_np.append(states_val[i][0+50:length_curr_rollout-100+50]) # 添加50步标签 (Add 50-step labels)
                 labels_100step_np.append(states_val[i][0+100:length_curr_rollout-100+100]) # 添加100步标签 (Add 100-step labels)
+
+        if len(validation_inputs_states_np) == 0:
+            if not print_minimal:  # 如果未收集到足够长的rollout，则打印提示并跳过 (Print notice if rollouts are too short)
+                print("Skipping validation metrics due to short rollouts")
+            return
 
         validation_inputs_states_np = np.concatenate(validation_inputs_states_np) # 连接验证输入状态 (Concatenate validation input states)
         controls_100step_np = np.concatenate(controls_100step_np) # 连接100步控制 (Concatenate 100-step controls)
