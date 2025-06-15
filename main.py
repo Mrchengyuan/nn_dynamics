@@ -64,6 +64,10 @@ def main(): # 定义主函数 (Define main function)
                         default=False, type=lambda x: str(x).lower() == 'true') # 添加print_minimal参数, 允许显式True/False (Add print_minimal argument, allow explicit True/False)
     args = parser.parse_args() # 解析命令行参数 (Parse command-line arguments)
 
+    might_render = False # 初始化是否渲染标志 (Initialize flag whether to render)
+    if args.visualize_MPC_rollout or args.might_render: # 如果需要可视化 (If visualization is requested)
+        might_render = True # 设置标志为True (Set flag to True)
+
 
     ########################################
     ######### YAML文件中的参数 (params from yaml file) ########
@@ -237,7 +241,7 @@ def main(): # 定义主函数 (Define main function)
         print("#####################################\n") # 打印分隔符 (Print separator)
 
     # 创建环境 (create env)
-    env, dt_from_xml = create_env(which_agent) # 调用create_env函数创建环境 (Call create_env function to create environment)
+    env, dt_from_xml = create_env(which_agent, render_mode='human' if might_render else None) # 创建环境并根据需要设置渲染模式 (Create environment and set render mode if needed)
     # 注意: create_env可能包含TensorFlow依赖，需要检查 (Note: create_env might contain TensorFlow dependencies, needs checking)
 
     # 为数据收集创建随机策略 (create random policy for data collection)
@@ -392,11 +396,8 @@ def main(): # 定义主函数 (Define main function)
     outputs_normalized = np.copy(dataZ_normalized) # 复制标准化的dataZ (Copy normalized dataZ)
 
     # 此处的渲染调用是为了避免稍后出现错误 (doing a render here somehow allows it to not produce an error later)
-    might_render= False # 是否可能渲染 (Whether rendering might occur)
-    if(args.visualize_MPC_rollout or args.might_render): # 如果可视化MPC rollout或可能渲染 (If visualizing MPC rollout or might render)
-        might_render=True # 设置为True (Set to True)
-    if(might_render): # 如果可能渲染 (If might render)
-        new_env, _ = create_env(which_agent) # 创建新环境 (Create new environment)
+    if(might_render): # 如果需要渲染 (If rendering is desired)
+        new_env, _ = create_env(which_agent, render_mode='human') # 创建带渲染的环境 (Create environment with rendering)
         new_env.render() # 渲染环境 (Render environment)
         new_env.close() # 关闭环境 (Close environment)
 

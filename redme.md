@@ -24,4 +24,5 @@ python3 main.py --seed=0 --run_num=0 --yaml_file=swimmer_forward
 ```
 
 该命令将在 `run_0` 目录下生成训练数据并训练简单的动力学模型。
+如果想在采样或MPC回放过程中看到实时画面，可以在命令中加入 `--might_render` 或 `--visualize_MPC_rollout` 参数，环境将以 Gym 的人类渲染模式显示。
 

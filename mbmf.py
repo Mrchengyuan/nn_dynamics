@@ -164,7 +164,7 @@ if __name__ == '__main__': # 如果是主模块 (If it's the main module)
 
     # 为GetTrueAction和渲染创建一次性环境 (Create one-time env for GetTrueAction and rendering if needed)
     # 注意：如果create_env返回的是rllab包装器，可能需要解包 (Note: if create_env returns rllab wrapper, might need unwrap)
-    temp_env_for_gt, dt_from_xml = create_env(which_agent, seed=seed, render_mode='rgb_array' if might_render else None)
+    temp_env_for_gt, dt_from_xml = create_env(which_agent, seed=seed, render_mode='human' if might_render else None) # 创建用于GetTrueAction的环境，根据需要设置渲染模式 (Create env for GetTrueAction with render mode if needed)
     # env_for_spec = GymnasiumEnv(temp_env_for_gt) # Garage TRPO的env_spec需要GymnasiumEnv (Garage TRPO's env_spec needs GymnasiumEnv)
 
 
