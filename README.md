@@ -245,6 +245,7 @@ Need to specify:
 &nbsp;&nbsp;&nbsp;&nbsp;--**visualize_MPC_rollout** To set a breakpoint and visualize the on-policy rollouts after each agg iteration
 &nbsp;&nbsp;&nbsp;&nbsp;--**perform_forwardsim_for_vis** To visualize an open-loop prediction made by the learned dynamics model
 &nbsp;&nbsp;&nbsp;&nbsp;--**print_minimal** To not print messages regarding progress/notes/etc.
+&nbsp;&nbsp;&nbsp;&nbsp;*When `--might_render` or `--visualize_MPC_rollout` is specified, the environment will be created with Gym's human render mode so you can watch the rollouts in real time. If no display is available (for example on a headless server), the code automatically falls back to a non-rendering mode.*
 
 ##### Examples:
 ```bash
